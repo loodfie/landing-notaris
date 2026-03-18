@@ -1,0 +1,144 @@
+{
+  "_panduan_developer": {
+    "tambah_produk": "Tambah objek baru ke array 'products' dengan struktur yang sama",
+    "tambah_gambar": "Isi array 'images' dengan URL gambar (bisa dari Cloudinary, imgbb, dll) atau path lokal seperti '/foto.png'",
+    "tambah_video": "Isi array 'videos' dengan YouTube video ID (bagian setelah ?v= di URL YouTube)",
+    "aktifkan_link": "Ubah 'status' menjadi 'available' dan isi 'href' dengan URL yang benar",
+    "tambah_fitur": "Tambah objek ke array 'features'. Icon yang tersedia: ShieldCheck, Clock, CreditCard, Users, Briefcase, Lock, Cloud, Database, BookOpen, Video, Layers, Award, Bell, FileText, MessageSquare, Settings, Zap, Globe, Smartphone. Color: blue, rose, emerald, amber, violet, slate"
+  },
+  "products": [
+    {
+      "id": "adc-notary",
+      "name": "ADC Notary",
+      "tagline": "Sistem Administrasi Terpusat untuk Notaris & PPAT",
+      "description": "Tingkatkan efisiensi kerja kantor Anda. Pantau progres berkas secara mendetail, kelola tagihan pembayaran, dan berikan update transparan kepada klien secara otomatis—semua dari satu layar.",
+      "category": "Aplikasi Manajemen",
+      "categoryType": "management",
+      "status": "available",
+      "featured": true,
+      "mockupImage": "/mockup.png",
+      "mockupFallback": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop",
+      "platforms": [
+        {
+          "label": "Versi Web",
+          "type": "web",
+          "status": "available",
+          "href": "https://notaris.loodfie.net/#/register",
+          "cta": "Coba Sekarang"
+        },
+        {
+          "label": "Versi Mobile",
+          "type": "android",
+          "status": "available",
+          "href": "https://github.com/loodfie/adc-notary-mobile/releases/latest/download/adc.notary.mobile.apk",
+          "cta": "Download APK",
+          "requiresSubscription": true,
+          "purchaseHref": "https://loodfie.myr.id/plink/adc-notary-mobile"
+        }
+        
+      ],
+      "features": [
+        {
+          "icon": "ShieldCheck",
+          "color": "blue",
+          "title": "Efisiensi Alur Kerja",
+          "description": "Pantau setiap tahap dokumen dari pengumpulan syarat hingga serah terima tanpa ada yang terlewat."
+        },
+        {
+          "icon": "Clock",
+          "color": "rose",
+          "title": "Radar Jatuh Tempo",
+          "description": "Sistem peringatan otomatis untuk berkas yang mengendap lama atau mendekati batas waktu penyelesaian."
+        },
+        {
+          "icon": "Users",
+          "color": "emerald",
+          "title": "Portal Klien Mandiri",
+          "description": "Bebaskan staf dari chat klien. Klien dapat mengecek progres berkasnya sendiri secara real-time dan aman."
+        },
+        {
+          "icon": "CreditCard",
+          "color": "amber",
+          "title": "Manajemen Keuangan",
+          "description": "Catat uang muka (DP) dan pantau sisa tagihan klien yang terintegrasi langsung dengan progres berkas."
+        }
+      ],
+      "images": [
+        {
+          "label": "Tampilan Web",
+          "src": "/mockup.png",
+          "alt": "Dashboard ADC Notary versi Web",
+          "caption": "Dashboard Admin — Versi Web"
+        },
+        {
+          "label": "Tampilan Mobile",
+          "src": "",
+          "alt": "Dashboard ADC Notary versi Mobile",
+          "caption": "Dashboard Admin — Versi Mobile"
+        }
+      ],
+      "videos": [
+        {
+          "label": "Tutorial Web",
+          "title": "Panduan Penggunaan ADC Notary — Versi Web",
+          "youtubeId": "",
+          "description": "Panduan lengkap menggunakan ADC Notary di browser"
+        },
+        {
+          "label": "Tutorial Mobile",
+          "title": "Panduan Penggunaan ADC Notary — Versi Mobile",
+          "youtubeId": "",
+          "description": "Panduan lengkap menggunakan ADC Notary di Android"
+        }
+      ]
+    },
+    {
+      "id": "ecourse",
+      "name": "E-Course",
+      "tagline": "Platform belajar digital interaktif",
+      "description": "Kursus online berkualitas tinggi di bidang teknologi, bisnis, dan pengembangan diri. Belajar kapan saja, di mana saja.",
+      "category": "Pendidikan Digital",
+      "categoryType": "education",
+      "status": "coming_soon",
+      "featured": false,
+      "mockupImage": null,
+      "mockupFallback": null,
+      "platforms": [
+        {
+          "label": "Web",
+          "type": "web",
+          "status": "coming_soon",
+          "href": null,
+          "cta": "Segera Hadir"
+        }
+      ],
+      "features": [],
+      "images": [],
+      "videos": []
+    },
+    {
+      "id": "ebook",
+      "name": "E-Book",
+      "tagline": "Konten digital berkualitas dalam genggaman",
+      "description": "Koleksi e-book praktis dan informatif untuk meningkatkan skill dan wawasan Anda di berbagai bidang.",
+      "category": "Konten Digital",
+      "categoryType": "content",
+      "status": "coming_soon",
+      "featured": false,
+      "mockupImage": null,
+      "mockupFallback": null,
+      "platforms": [
+        {
+          "label": "Digital Download",
+          "type": "download",
+          "status": "coming_soon",
+          "href": null,
+          "cta": "Segera Hadir"
+        }
+      ],
+      "features": [],
+      "images": [],
+      "videos": []
+    }
+  ]
+}
