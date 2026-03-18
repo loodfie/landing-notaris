@@ -126,6 +126,34 @@ const PLATFORM_ICON_MAP: Record<string, React.ComponentType<{ size?: number }>> 
   download: Download,
 };
 
+function ImageWithFallback({ img }: { img: { src: string; alt: string; caption?: string } }) {
+  const [error, setError] = useState(false);
+  if (error) {
+    return (
+      <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.02] min-h-[220px] flex flex-col items-center justify-center gap-3 text-center p-8">
+        <Smartphone size={36} className="text-slate-700" />
+        <p className="text-slate-600 font-bold text-sm">Gambar gagal dimuat</p>
+        <p className="text-slate-700 text-xs font-mono">{img.src}</p>
+      </div>
+    );
+  }
+  return (
+    <div className="group relative rounded-2xl overflow-hidden border border-white/10 bg-slate-800 shadow-xl">
+      <img
+        src={img.src}
+        alt={img.alt}
+        className="w-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+        onError={() => setError(true)}
+      />
+      {img.caption && (
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+          <p className="text-white text-sm font-semibold">{img.caption}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function getCategoryStyle(categoryType: string): string {
   const styles: Record<string, string> = {
     management: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
@@ -306,19 +334,7 @@ export default function ProductDetail({ product, onBack }: { product: Product; o
                   )}
                   {/* Gambar atau placeholder */}
                   {img.src ? (
-                    <div className="group relative rounded-2xl overflow-hidden border border-white/10 bg-slate-800 shadow-xl">
-                      <img
-                        src={img.src}
-                        alt={img.alt}
-                        className="w-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
-                        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-                      />
-                      {img.caption && (
-                        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
-                          <p className="text-white text-sm font-semibold">{img.caption}</p>
-                        </div>
-                      )}
-                    </div>
+                    <ImageWithFallback img={img} />
                   ) : (
                     <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.02] min-h-[220px] flex flex-col items-center justify-center gap-3 text-center p-8">
                       <Smartphone size={36} className="text-slate-700" />
