@@ -92,7 +92,20 @@ function DownloadModal({ platform, productName, onClose }: {
           </button>
         </div>
 
-        <p className="text-center text-xs text-slate-600 mt-5">
+        {/* Penjelasan peringatan Google Drive */}
+        <div className="mt-5 p-4 bg-slate-700/50 border border-white/5 rounded-2xl">
+          <div className="flex items-start gap-2.5">
+            <span className="text-amber-400 mt-0.5 shrink-0">⚠️</span>
+            <div>
+              <p className="text-amber-400 text-xs font-black uppercase tracking-wider mb-1">Catatan saat download</p>
+              <p className="text-slate-400 text-xs leading-relaxed">
+                Google Drive akan menampilkan peringatan <span className="text-white font-semibold">"tidak dapat memindai virus"</span> — ini <span className="text-emerald-400 font-semibold">normal dan aman</span>. Peringatan muncul karena ukuran file APK yang besar (&gt;25MB), bukan karena file berbahaya. Klik <span className="text-white font-semibold">"Tetap download"</span> untuk melanjutkan.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <p className="text-center text-xs text-slate-600 mt-4">
           Butuh bantuan? Hubungi kami via WhatsApp
         </p>
       </div>
