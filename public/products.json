@@ -77,20 +77,7 @@
           "caption": "Dashboard Admin — Versi Mobile"
         }
       ],
-      "videos": [
-        {
-          "label": "Tutorial Web",
-          "title": "Panduan Penggunaan ADC Notary — Versi Web",
-          "youtubeId": "",
-          "description": "Panduan lengkap menggunakan ADC Notary di browser"
-        },
-        {
-          "label": "Tutorial Mobile",
-          "title": "Panduan Penggunaan ADC Notary — Versi Mobile",
-          "youtubeId": "",
-          "description": "Panduan lengkap menggunakan ADC Notary di Android"
-        }
-      ]
+      "videos": []
     },
     {
       "id": "ecourse",

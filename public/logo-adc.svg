@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1E3A5F;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0F2744;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0F172A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#162032;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="goldLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#D4A853;stop-opacity:0" />
+      <stop offset="30%" style="stop-color:#D4A853;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#D4A853;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D4A853;stop-opacity:0" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background rounded square -->
+  <rect width="512" height="512" fill="url(#bgGrad)" rx="96"/>
+
+  <!-- Subtle outer ring decoration -->
+  <circle cx="256" cy="235" r="168" fill="none" stroke="#D4A853" stroke-width="1" opacity="0.15"/>
+  <circle cx="256" cy="235" r="148" fill="none" stroke="#D4A853" stroke-width="0.5" opacity="0.1"/>
+
+  <!-- Corner accent dots -->
+  <circle cx="100" cy="412" r="3" fill="#D4A853" opacity="0.4"/>
+  <circle cx="412" cy="412" r="3" fill="#D4A853" opacity="0.4"/>
+
+  <!-- Shield shape -->
+  <path d="M256 88 L378 135 L378 248 C378 315 325 365 256 390 C187 365 134 315 134 248 L134 135 Z" fill="url(#shieldGrad)"/>
+  <path d="M256 88 L378 135 L378 248 C378 315 325 365 256 390 C187 365 134 315 134 248 L134 135 Z" fill="none" stroke="#D4A853" stroke-width="1.8" opacity="0.9"/>
+
+  <!-- Shield inner highlight (top) -->
+  <path d="M256 88 L378 135 L378 175 C340 162 300 155 256 153 C212 155 172 162 134 175 L134 135 Z" fill="rgba(255,255,255,0.04)"/>
+
+  <!-- ADC text -->
+  <text x="256" y="278" text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="88" font-weight="bold"
+    fill="#FFFFFF"
+    letter-spacing="3"
+    filter="url(#glow)">ADC</text>
+
+  <!-- Gold separator line with dots -->
+  <rect x="162" y="293" width="188" height="1.5" fill="url(#goldLine)" rx="1"/>
+  <circle cx="162" cy="293.75" r="3" fill="#D4A853" opacity="0.8"/>
+  <circle cx="350" cy="293.75" r="3" fill="#D4A853" opacity="0.8"/>
+
+  <!-- NOTARY text -->
+  <text x="256" y="323" text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="21" font-weight="400"
+    fill="#D4A853"
+    letter-spacing="11">NOTARY</text>
+
+  <!-- Bottom label pill -->
+  <rect x="196" y="418" width="120" height="28" rx="14" fill="#1E3A5F" stroke="#D4A853" stroke-width="1" opacity="0.8"/>
+  <text x="256" y="437" text-anchor="middle"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="11" font-weight="600"
+    fill="#D4A853"
+    letter-spacing="4">MOBILE</text>
+</svg>

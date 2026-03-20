@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   LogIn, LogOut, Plus, Pencil, Trash2, Save, X, ChevronDown, ChevronUp,
   Layers, ShieldCheck, Eye, EyeOff, ArrowLeft, Loader2, Package, FileText, Palette,
@@ -683,16 +683,47 @@ function ThemeTab() {
 // MAIN ADMIN PANEL
 // ══════════════════════════════════════════════════════════════════════════════
 
+const INACTIVITY_MS = 15 * 60 * 1000; // 15 minutes
+
 export default function AdminPanel() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [checking, setChecking] = useState(true);
   const [activeTab, setActiveTab] = useState<'products' | 'content' | 'theme'>('products');
+  const [showTimeoutWarning, setShowTimeoutWarning] = useState(false);
+  const inactivityTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const warningTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => { setLoggedIn(!!data.session); setChecking(false); });
   }, []);
 
-  const handleLogout = async () => { await supabase.auth.signOut(); setLoggedIn(false); };
+  const handleLogout = async () => {
+    clearTimeout(inactivityTimer.current!);
+    clearTimeout(warningTimer.current!);
+    await supabase.auth.signOut();
+    setLoggedIn(false);
+  };
+
+  const resetInactivityTimer = useCallback(() => {
+    setShowTimeoutWarning(false);
+    clearTimeout(inactivityTimer.current!);
+    clearTimeout(warningTimer.current!);
+    // Show warning 2 minutes before logout
+    warningTimer.current = setTimeout(() => setShowTimeoutWarning(true), INACTIVITY_MS - 2 * 60 * 1000);
+    inactivityTimer.current = setTimeout(() => handleLogout(), INACTIVITY_MS);
+  }, []);
+
+  useEffect(() => {
+    if (!loggedIn) return;
+    const events = ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart'];
+    events.forEach(e => window.addEventListener(e, resetInactivityTimer));
+    resetInactivityTimer();
+    return () => {
+      events.forEach(e => window.removeEventListener(e, resetInactivityTimer));
+      clearTimeout(inactivityTimer.current!);
+      clearTimeout(warningTimer.current!);
+    };
+  }, [loggedIn, resetInactivityTimer]);
 
   if (checking) return <div className="min-h-screen bg-slate-900 flex items-center justify-center"><Loader2 size={32} className="text-amber-500 animate-spin" /></div>;
   if (!loggedIn) return <LoginPage onLogin={() => setLoggedIn(true)} />;
@@ -705,14 +736,27 @@ export default function AdminPanel() {
 
   return (
     <div className="min-h-screen bg-slate-900 text-slate-200">
+      {/* Inactivity warning banner */}
+      {showTimeoutWarning && (
+        <div className="fixed top-0 left-0 right-0 z-[100] bg-amber-500 text-white text-sm font-bold text-center py-2.5 px-4 flex items-center justify-center gap-3">
+          <span>⚠ Sesi akan berakhir dalam 2 menit karena tidak ada aktivitas.</span>
+          <button onClick={resetInactivityTimer} className="underline hover:no-underline">Tetap Aktif</button>
+        </div>
+      )}
+
       {/* Navbar */}
-      <nav className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-white/10">
+      <nav className={`sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-white/10 ${showTimeoutWarning ? 'mt-[42px]' : ''}`}>
         <div className="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white"><Layers size={16} strokeWidth={2.5} /></div>
             <span className="font-black text-white text-sm">Admin Panel <span className="text-slate-600">— Alfa Digital Communica</span></span>
           </div>
-          <a href="/" target="_blank" rel="noopener noreferrer" className="text-xs text-slate-500 hover:text-slate-300 transition-colors font-bold">Lihat Landing Page →</a>
+          <div className="flex items-center gap-3">
+            <a href="/" target="_blank" rel="noopener noreferrer" className="text-xs text-slate-500 hover:text-slate-300 transition-colors font-bold">Lihat Landing Page →</a>
+            <button onClick={handleLogout} className="flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-red-400 transition-colors border border-white/10 hover:border-red-400/30 px-3 py-1.5 rounded-lg">
+              <LogOut size={13} /> Logout
+            </button>
+          </div>
         </div>
         {/* Tab Bar */}
         <div className="max-w-5xl mx-auto px-6 flex gap-1 pb-3">
