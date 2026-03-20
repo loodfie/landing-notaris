@@ -156,6 +156,8 @@ function ImageWithFallback({ img }: { img: { src: string; alt: string; caption?:
         src={img.src}
         alt={img.alt}
         className="w-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+        loading="lazy"
+        decoding="async"
         onError={() => setError(true)}
       />
       {img.caption && (
@@ -283,6 +285,8 @@ export default function ProductDetail({ product, onBack }: { product: Product; o
                   src={product.mockupImage}
                   alt={`Tampilan ${product.name}`}
                   className="rounded-xl w-full object-cover bg-slate-800"
+                  loading="lazy"
+                  decoding="async"
                   onError={(e) => {
                     if (product.mockupFallback) e.currentTarget.src = product.mockupFallback;
                   }}
