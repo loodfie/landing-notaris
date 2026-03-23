@@ -7,6 +7,7 @@ import {
   Award, Bell, FileText, MessageSquare, Settings, Zap,
 } from 'lucide-react';
 import type { Product, Platform } from './types';
+import type { PricingData } from './App';
 
 // ── Modal Konfirmasi Download Mobile ────────────────────────────────────────
 function DownloadModal({ platform, productName, onClose }: {
@@ -169,6 +170,82 @@ function ImageWithFallback({ img }: { img: { src: string; alt: string; caption?:
   );
 }
 
+// ── Pricing: site_content plans (ADC Notary dll) ──────────────────────────────
+function PricingCards({ pricing }: { pricing: PricingData }) {
+  return (
+    <section className="mb-24">
+      <div className="text-center mb-12">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-amber-400 text-xs font-black uppercase tracking-widest mb-4">{pricing.badge}</div>
+        <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-4">{pricing.title}</h2>
+        <p className="text-slate-400 font-medium max-w-xl mx-auto">{pricing.subtitle}</p>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+        {pricing.plans.map((plan, i) => (
+          <div key={i} className={`relative flex flex-col rounded-[28px] p-8 border transition-all ${plan.popular ? 'bg-white/[0.07] border-amber-500/30 shadow-xl shadow-amber-500/10 scale-[1.02]' : 'bg-white/5 border-white/10 hover:bg-white/[0.07]'}`}>
+            {plan.popular && <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 bg-amber-500 text-white text-xs font-black uppercase tracking-widest rounded-full shadow-lg shadow-amber-500/30 whitespace-nowrap">Paling Populer</div>}
+            <div className="mb-6">
+              <p className="text-slate-400 text-xs font-black uppercase tracking-widest mb-2">{plan.name}</p>
+              <div className="flex items-end gap-1 mb-2">
+                <span className="text-4xl font-black text-white">{plan.price}</span>
+                {plan.period && <span className="text-slate-400 text-sm mb-1">{plan.period}</span>}
+              </div>
+              <p className="text-slate-400 text-sm">{plan.desc}</p>
+            </div>
+            <ul className="space-y-3 mb-8 flex-1">
+              {plan.features.map((f, j) => (
+                <li key={j} className="flex items-start gap-2.5 text-sm text-slate-300">
+                  <CheckCircle2 size={16} className="text-emerald-500 shrink-0 mt-0.5" />{f}
+                </li>
+              ))}
+            </ul>
+            <a href={plan.href} target="_blank" rel="noopener noreferrer" className={`w-full py-3.5 rounded-2xl font-black text-sm uppercase tracking-widest text-center transition-all hover:-translate-y-0.5 ${plan.primary ? 'bg-amber-500 hover:bg-amber-600 text-white shadow-lg shadow-amber-500/20' : 'bg-white/5 border border-white/20 text-white hover:bg-white/10'}`}>{plan.cta}</a>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ── Pricing: platform tiers (Picted Pro dll) ──────────────────────────────────
+function PlatformPricingCards({ product }: { product: Product }) {
+  const purchasePlatforms = product.platforms.filter(p => p.status === 'available' && p.purchaseHref);
+  if (purchasePlatforms.length < 2) return null;
+  return (
+    <section className="mb-24">
+      <div className="text-center mb-12">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-amber-400 text-xs font-black uppercase tracking-widest mb-4">Harga Transparan</div>
+        <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-4">Pilih Paket {product.name}</h2>
+        <p className="text-slate-400 font-medium max-w-xl mx-auto">Tidak ada biaya bulanan. Beli sekali, pakai selamanya. Quota tidak expired.</p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+        {purchasePlatforms.map((platform, i) => {
+          const parts = platform.label.split(' — ');
+          const planName = parts[0]?.trim() || platform.label;
+          const priceInfo = parts[1]?.trim() || '';
+          const priceMatch = priceInfo.match(/Rp[\s\d.,]+/);
+          const price = priceMatch ? priceMatch[0].trim() : priceInfo;
+          const detail = priceInfo.replace(price, '').trim().replace(/^\(|\)$/, '');
+          const isMain = i === 0;
+          return (
+            <div key={i} className={`relative flex flex-col rounded-[28px] p-8 border transition-all ${isMain ? 'bg-white/[0.07] border-amber-500/30 shadow-xl shadow-amber-500/10' : 'bg-white/5 border-white/10 hover:bg-white/[0.07]'}`}>
+              {isMain && <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 bg-amber-500 text-white text-xs font-black uppercase tracking-widest rounded-full shadow-lg shadow-amber-500/30 whitespace-nowrap">Akses Utama</div>}
+              <div className="mb-4 mt-2">
+                <p className="text-slate-400 text-xs font-black uppercase tracking-widest mb-3">{planName}</p>
+                <div className="flex items-end gap-1 mb-1">
+                  <span className="text-3xl font-black text-white">{price || planName}</span>
+                </div>
+                {detail && <p className="text-amber-400 text-sm font-bold">{detail}</p>}
+              </div>
+              <div className="flex-1" />
+              <a href={platform.purchaseHref!} target="_blank" rel="noopener noreferrer" className={`w-full py-3.5 rounded-2xl font-black text-sm uppercase tracking-widest text-center transition-all hover:-translate-y-0.5 mt-6 ${isMain ? 'bg-amber-500 hover:bg-amber-600 text-white shadow-lg shadow-amber-500/20' : 'bg-white/5 border border-white/20 text-white hover:bg-white/10'}`}>{platform.cta}</a>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 function getCategoryStyle(categoryType: string): string {
   const styles: Record<string, string> = {
     management: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
@@ -178,7 +255,7 @@ function getCategoryStyle(categoryType: string): string {
   return styles[categoryType] ?? 'text-slate-400 bg-slate-500/10 border-slate-500/20';
 }
 
-export default function ProductDetail({ product, onBack }: { product: Product; onBack: () => void }) {
+export default function ProductDetail({ product, onBack, pricing }: { product: Product; onBack: () => void; pricing?: PricingData }) {
   const [modalPlatform, setModalPlatform] = useState<Platform | null>(null);
   const availablePlatforms = product.platforms.filter(p => p.status === 'available' && p.href);
 
@@ -415,6 +492,9 @@ export default function ProductDetail({ product, onBack }: { product: Product; o
             </div>
           </section>
         )}
+
+        {/* PRICING */}
+        {pricing ? <PricingCards pricing={pricing} /> : <PlatformPricingCards product={product} />}
 
         {/* CTA */}
         <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-white/10 p-10 md:p-14 rounded-[36px] text-center relative overflow-hidden">

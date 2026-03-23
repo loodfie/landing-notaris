@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import {
-  ArrowRight, Layers, Lock, Cloud, MessageCircle, Briefcase, Video,
-  BookOpen, Globe, Smartphone, Download, Star, ChevronRight, ExternalLink,
-  CheckCircle2, Users, FileText, Clock,
+  ArrowLeft, Layers, Lock, Cloud, MessageCircle, Briefcase, Video,
+  BookOpen, Smartphone, Star, ChevronRight,
+  CheckCircle2, Users, FileText, Clock, Zap,
 } from 'lucide-react';
 import type { Product } from './types';
 import ProductDetail from './ProductDetail';
@@ -111,65 +111,6 @@ function SocialProof({ content }: { content: SocialProofData }) {
   );
 }
 
-// ── Pricing Section ──────────────────────────────────────────────────────────
-function PricingSection({ content, faqs }: { content: PricingData; faqs: FaqItem[] }) {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-  return (
-    <section className="py-24 px-6 relative z-10 border-t border-white/5">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-amber-400 text-xs font-black uppercase tracking-widest mb-4">{content.badge}</div>
-          <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-4">{content.title}</h2>
-          <p className="text-slate-400 font-medium max-w-xl mx-auto">{content.subtitle}</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 items-start">
-          {content.plans.map((plan, i) => (
-            <div key={i} className={`relative flex flex-col rounded-[28px] p-8 border transition-all duration-300 ${plan.popular ? 'bg-white/[0.07] border-amber-500/30 shadow-xl shadow-amber-500/10 scale-[1.02]' : 'bg-white/5 border-white/10 hover:bg-white/[0.07]'}`}>
-              {plan.popular && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 bg-amber-500 text-white text-xs font-black uppercase tracking-widest rounded-full shadow-lg shadow-amber-500/30 whitespace-nowrap">Paling Populer</div>
-              )}
-              <div className="mb-6">
-                <p className="text-slate-400 text-xs font-black uppercase tracking-widest mb-2">{plan.name}</p>
-                <div className="flex items-end gap-1 mb-2">
-                  <span className="text-4xl font-black text-white">{plan.price}</span>
-                  {plan.period && <span className="text-slate-400 text-sm mb-1">{plan.period}</span>}
-                </div>
-                <p className="text-slate-400 text-sm">{plan.desc}</p>
-              </div>
-              <ul className="space-y-3 mb-8 flex-1">
-                {plan.features.map((f, j) => (
-                  <li key={j} className="flex items-start gap-2.5 text-sm text-slate-300">
-                    <CheckCircle2 size={16} className="text-emerald-500 shrink-0 mt-0.5" />{f}
-                  </li>
-                ))}
-              </ul>
-              <a href={plan.href} target="_blank" rel="noopener noreferrer" className={`w-full py-3.5 rounded-2xl font-black text-sm uppercase tracking-widest text-center transition-all hover:-translate-y-0.5 ${plan.primary ? 'bg-amber-500 hover:bg-amber-600 text-white shadow-lg shadow-amber-500/20' : 'bg-white/5 border border-white/20 text-white hover:bg-white/10'}`}>
-                {plan.cta}
-              </a>
-            </div>
-          ))}
-        </div>
-
-        <div className="max-w-2xl mx-auto">
-          <p className="text-center text-xs font-black uppercase tracking-widest text-slate-500 mb-6">Pertanyaan Umum</p>
-          <div className="flex flex-col gap-3">
-            {faqs.map((faq, i) => (
-              <div key={i} className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
-                <button onClick={() => setOpenFaq(openFaq === i ? null : i)} className="w-full flex items-center justify-between p-5 text-left text-white font-bold text-sm hover:bg-white/5 transition-colors">
-                  {faq.q}
-                  <span className={`text-amber-400 transition-transform duration-300 text-lg leading-none ${openFaq === i ? 'rotate-45' : ''}`}>+</span>
-                </button>
-                {openFaq === i && <div className="px-5 pb-5 text-slate-400 text-sm leading-relaxed border-t border-white/5 pt-4">{faq.a}</div>}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 // ── Category / Platform helpers ───────────────────────────────────────────────
 function getCategoryStyle(t: string) {
   return ({ management: 'text-amber-400 bg-amber-500/10 border-amber-500/20', education: 'text-violet-400 bg-violet-500/10 border-violet-500/20', content: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' } as Record<string, string>)[t] ?? 'text-slate-400 bg-slate-500/10 border-slate-500/20';
@@ -177,71 +118,30 @@ function getCategoryStyle(t: string) {
 function getCategoryIcon(t: string) {
   return ({ management: <Briefcase size={14} />, education: <Video size={14} />, content: <BookOpen size={14} /> } as Record<string, React.ReactNode>)[t] ?? <Layers size={14} />;
 }
-function getPlatformIcon(t: string) {
-  return ({ web: <Globe size={16} />, android: <Smartphone size={16} />, ios: <Smartphone size={16} />, download: <Download size={16} /> } as Record<string, React.ReactNode>)[t] ?? <ExternalLink size={16} />;
-}
 
-// ── Featured Product Card ─────────────────────────────────────────────────────
-function FeaturedProductCard({ product, onDetail }: { product: Product; onDetail: () => void }) {
-  return (
-    <div className="relative bg-white/5 backdrop-blur-lg border border-white/10 rounded-[32px] overflow-hidden group hover:border-amber-500/30 transition-all duration-500 cursor-pointer" onClick={onDetail}>
-      <div className="absolute top-6 right-6 z-10 flex items-center gap-1.5 px-3 py-1 bg-amber-500/20 border border-amber-500/30 rounded-full text-amber-400 text-xs font-black uppercase tracking-widest">
-        <Star size={11} fill="currentColor" /> Unggulan
-      </div>
-      <div className="grid md:grid-cols-2 gap-0">
-        <div className="p-8 md:p-10 flex flex-col justify-between">
-          <div>
-            <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-bold uppercase tracking-wider mb-4 ${getCategoryStyle(product.categoryType)}`}>{getCategoryIcon(product.categoryType)} {product.category}</div>
-            <h3 className="text-2xl md:text-3xl font-black text-white mb-2">{product.name}</h3>
-            <p className="text-amber-400/80 font-semibold text-sm mb-4">{product.tagline}</p>
-            <p className="text-slate-400 text-sm leading-relaxed mb-6">{product.description}</p>
-          </div>
-          <div>
-            <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mb-3">Tersedia di</p>
-            <div className="flex flex-wrap gap-2 mb-6">
-              {product.platforms.map((p, i) => (
-                <div key={i} className="flex items-center gap-1.5 text-xs font-semibold text-slate-400">
-                  {getPlatformIcon(p.type)}{p.label}
-                  {p.status === 'available' ? <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 ml-0.5"></span> : <span className="text-[10px] text-slate-600 font-bold">(Soon)</span>}
-                </div>
-              ))}
-            </div>
-            <button onClick={(e) => { e.stopPropagation(); onDetail(); }} className="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-bold transition-all hover:-translate-y-0.5 shadow-lg shadow-amber-500/20 text-sm">
-              Lihat Detail Produk <ChevronRight size={16} />
-            </button>
-          </div>
-        </div>
-        <div className="relative bg-slate-800/50 flex items-center justify-center p-6 md:p-8 min-h-[280px]">
-          <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent"></div>
-          {product.mockupImage && (
-            <div className="relative w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl group-hover:scale-[1.02] transition-transform duration-500">
-              <div className="flex gap-1.5 p-3 bg-slate-900/80">
-                <div className="w-2.5 h-2.5 rounded-full bg-red-500/70"></div>
-                <div className="w-2.5 h-2.5 rounded-full bg-amber-500/70"></div>
-                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/70"></div>
-              </div>
-              <img src={product.mockupImage} alt={`Tampilan ${product.name}`} className="w-full object-cover bg-slate-800" loading="lazy" decoding="async" onError={(e) => { if (product.mockupFallback) (e.currentTarget as HTMLImageElement).src = product.mockupFallback; }} />
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
 
-// ── Regular Product Card ──────────────────────────────────────────────────────
-function ProductCard({ product, onDetail }: { product: Product; onDetail: () => void }) {
+// ── Categories ────────────────────────────────────────────────────────────────
+const CATEGORIES = [
+  { key: 'Aplikasi Manajemen', description: 'Software manajemen operasional untuk kantor, firma hukum, dan bisnis — kelola berkas, keuangan, dan klien dari satu dashboard.', icon: Briefcase, iconBg: 'bg-amber-500/10', iconColor: 'text-amber-400' },
+  { key: 'Pendidikan Digital', description: 'Kursus online interaktif di bidang teknologi, bisnis, dan pengembangan diri. Belajar kapan saja, di mana saja.', icon: BookOpen, iconBg: 'bg-violet-500/10', iconColor: 'text-violet-400' },
+  { key: 'Konten Digital', description: 'Koleksi e-book dan materi digital berkualitas untuk referensi bisnis, panduan teknis, dan pengembangan wawasan profesional.', icon: FileText, iconBg: 'bg-emerald-500/10', iconColor: 'text-emerald-400' },
+  { key: 'AI & Kreatif', description: 'Tools berbasis kecerdasan buatan untuk mempercepat workflow kreatif — dari edit foto AI hingga generasi konten otomatis.', icon: Zap, iconBg: 'bg-cyan-500/10', iconColor: 'text-cyan-400' },
+];
+
+// ── FAQ Section ───────────────────────────────────────────────────────────────
+function FaqSection({ faqs }: { faqs: FaqItem[] }) {
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
   return (
-    <div className="relative bg-white/5 backdrop-blur-lg border border-white/10 rounded-[28px] p-8 group hover:bg-white/[0.07] hover:border-white/20 transition-all duration-300 flex flex-col justify-between cursor-pointer" onClick={onDetail}>
-      <div className="absolute top-5 right-5 px-2.5 py-1 bg-slate-700/80 border border-white/10 rounded-lg text-[10px] font-black text-slate-400 uppercase tracking-widest">Coming Soon</div>
-      <div>
-        <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-bold uppercase tracking-wider mb-4 ${getCategoryStyle(product.categoryType)}`}>{getCategoryIcon(product.categoryType)} {product.category}</div>
-        <h3 className="text-xl font-black text-white mb-2">{product.name}</h3>
-        <p className="text-slate-400 text-sm leading-relaxed mb-6">{product.description}</p>
-      </div>
-      <button onClick={(e) => { e.stopPropagation(); onDetail(); }} className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors font-bold text-sm group/btn">
-        Lihat Info <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
-      </button>
+    <div className="flex flex-col gap-3">
+      {faqs.map((faq, i) => (
+        <div key={i} className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+          <button onClick={() => setOpenFaq(openFaq === i ? null : i)} className="w-full flex items-center justify-between p-5 text-left text-white font-bold text-sm hover:bg-white/5 transition-colors">
+            {faq.q}
+            <span className={`text-amber-400 transition-transform duration-300 text-lg leading-none ${openFaq === i ? 'rotate-45' : ''}`}>+</span>
+          </button>
+          {openFaq === i && <div className="px-5 pb-5 text-slate-400 text-sm leading-relaxed border-t border-white/5 pt-4">{faq.a}</div>}
+        </div>
+      ))}
     </div>
   );
 }
@@ -252,6 +152,7 @@ function LandingPage() {
   const [content, setContent] = useState<SiteContent>(DEFAULT_CONTENT);
   const [loading, setLoading] = useState(true);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   useEffect(() => {
     Promise.all([
@@ -279,9 +180,8 @@ function LandingPage() {
   const handleBack = () => { setSelectedProductId(null); window.scrollTo({ top: 0, behavior: 'smooth' }); };
 
   const selectedProduct = products.find(p => p.id === selectedProductId);
-  const featuredProduct = products.find(p => p.featured);
-  const otherProducts = products.filter(p => !p.featured);
   const waUrl = `https://wa.me/${content.settings.waNumber}?text=${content.settings.waDefaultMessage}`;
+  const categoryProducts = selectedCategory ? products.filter(p => p.category === selectedCategory) : [];
 
   if (loading) {
     return (
@@ -318,7 +218,7 @@ function LandingPage() {
       {/* PRODUCT DETAIL VIEW */}
       {selectedProduct && (
         <div className="pt-[73px]">
-          <ProductDetail product={selectedProduct} onBack={handleBack} />
+          <ProductDetail product={selectedProduct} onBack={handleBack} pricing={selectedProduct.categoryType === 'management' ? content.pricing : undefined} />
         </div>
       )}
 
@@ -361,30 +261,90 @@ function LandingPage() {
           {/* SOCIAL PROOF */}
           <SocialProof content={content.socialProof} />
 
-          {/* PRODUK */}
+          {/* KATALOG PRODUK */}
           <section id="produk" className="py-24 px-6 relative z-10 bg-black/20 border-t border-white/5">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-16">
                 <p className="text-amber-500 text-xs font-black uppercase tracking-widest mb-3">Katalog Produk</p>
                 <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-4">Produk & Layanan Kami</h2>
-                <p className="text-slate-400 font-medium max-w-2xl mx-auto">Dari aplikasi manajemen hingga konten edukatif—solusi digital lengkap untuk kebutuhan Anda.</p>
+                <p className="text-slate-400 font-medium max-w-2xl mx-auto">Pilih kategori untuk melihat produk digital yang kami tawarkan.</p>
               </div>
-              {featuredProduct && <div className="mb-8"><FeaturedProductCard product={featuredProduct} onDetail={() => handleOpenDetail(featuredProduct.id)} /></div>}
-              {otherProducts.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {otherProducts.map(p => <ProductCard key={p.id} product={p} onDetail={() => handleOpenDetail(p.id)} />)}
-                  <div className="bg-white/[0.02] border border-dashed border-white/10 rounded-[28px] p-8 flex flex-col items-center justify-center text-center min-h-[200px] gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-600"><Layers size={24} /></div>
-                    <p className="text-slate-600 font-bold text-sm">Produk Berikutnya</p>
-                    <p className="text-slate-700 text-xs">Sedang dalam pengembangan</p>
-                  </div>
+              {!selectedCategory ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {CATEGORIES.map(cat => {
+                    const CatIcon = cat.icon;
+                    const count = products.filter(p => p.category === cat.key).length;
+                    return (
+                      <div key={cat.key} onClick={() => setSelectedCategory(cat.key)} className="group bg-white/5 border border-white/10 rounded-[28px] p-8 cursor-pointer hover:bg-white/[0.07] hover:border-white/20 transition-all duration-300 flex flex-col">
+                        <div className={`w-14 h-14 rounded-2xl ${cat.iconBg} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform`}>
+                          <CatIcon size={26} className={cat.iconColor} />
+                        </div>
+                        <h3 className="text-lg font-black text-white mb-3">{cat.key}</h3>
+                        <p className="text-slate-400 text-sm leading-relaxed mb-6 flex-1">{cat.description}</p>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-slate-600 font-bold">{count} produk</span>
+                          <div className="flex items-center gap-1 text-amber-400 text-sm font-bold group-hover:gap-2 transition-all">
+                            Lihat <ChevronRight size={15} />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div>
+                  <button onClick={() => setSelectedCategory(null)} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors font-bold text-sm mb-10 group">
+                    <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Semua Kategori
+                  </button>
+                  {categoryProducts.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {categoryProducts.map(p => (
+                        <div key={p.id} className="bg-white/5 border border-white/10 rounded-[28px] p-8 flex flex-col justify-between hover:bg-white/[0.07] hover:border-white/20 transition-all duration-300">
+                          <div>
+                            <div className="flex items-center justify-between mb-4">
+                              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-bold uppercase tracking-wider ${getCategoryStyle(p.categoryType)}`}>{getCategoryIcon(p.categoryType)} {p.category}</span>
+                              {p.status === 'available'
+                                ? <span className="flex items-center gap-1.5 text-xs font-bold text-emerald-400"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>LIVE</span>
+                                : <span className="flex items-center gap-1.5 text-xs font-bold text-slate-500"><span className="w-1.5 h-1.5 rounded-full bg-slate-600 animate-pulse"></span>SEGERA</span>}
+                            </div>
+                            <h3 className="text-xl font-black text-white mb-2">{p.name}</h3>
+                            <p className="text-amber-400/80 text-sm font-semibold mb-3">{p.tagline}</p>
+                            <p className="text-slate-400 text-sm leading-relaxed mb-6">{p.description}</p>
+                          </div>
+                          {p.status === 'available' ? (
+                            <button onClick={() => handleOpenDetail(p.id)} className="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-bold transition-all hover:-translate-y-0.5 shadow-lg shadow-amber-500/20 text-sm">
+                              Lihat Detail <ChevronRight size={16} />
+                            </button>
+                          ) : (
+                            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 text-slate-500 rounded-xl font-bold text-sm">
+                              <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>Segera Hadir
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-20">
+                      <Layers size={48} className="mx-auto text-slate-700 mb-4" />
+                      <p className="text-slate-500 font-bold text-lg">Produk segera hadir di kategori ini</p>
+                      <p className="text-slate-600 text-sm mt-2">Pantau terus perkembangan kami</p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
           </section>
 
-          {/* PRICING */}
-          <PricingSection content={content.pricing} faqs={content.faqs} />
+          {/* FAQ */}
+          <section className="py-24 px-6 relative z-10 border-t border-white/5">
+            <div className="max-w-2xl mx-auto">
+              <div className="text-center mb-10">
+                <p className="text-amber-500 text-xs font-black uppercase tracking-widest mb-3">FAQ</p>
+                <h2 className="text-3xl font-black text-white tracking-tight">Pertanyaan Umum</h2>
+              </div>
+              <FaqSection faqs={content.faqs} />
+            </div>
+          </section>
 
           {/* CTA */}
           <section className="py-24 px-6 relative z-10">
